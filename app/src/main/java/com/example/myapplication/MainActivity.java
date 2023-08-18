@@ -7,6 +7,8 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView;
     GestureDetector gd;
+    String name;
+    EditText editText;
+    TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,40 @@ public class MainActivity extends AppCompatActivity {
                return true;
            }
        });
+       showToast("onCreate 호출");
+       editText=findViewById(R.id.editTextText);
+       textView2 = findViewById(R.id.textView2);
+        Button button = findViewById(R.id.button);
+        if(button!=null) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (editText != null) {
+                        name = editText.getText().toString();
+                        showToast("사용자 입력값을 name 변수에 할당");
+                    }
+                }
+            });
+        }
+        if(savedInstanceState!=null){
+            if(textView2!=null){
+                name=savedInstanceState.getString("name");
+                textView2.setText(name);
+                showToast("값을 복원했습니다.name="+name);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("name : ",name);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        showToast("onDestory 호출");
     }
 
     @Override
@@ -118,4 +157,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void showToast(String data){
+        Toast.makeText(this,data,Toast.LENGTH_SHORT).show();
+    }
 }
